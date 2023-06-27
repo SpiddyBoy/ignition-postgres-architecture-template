@@ -1,4 +1,4 @@
-# Postgres Docker Project Template
+# Postgres Docker Project Template, Step-CA Compatible
 
 ___
 
@@ -6,7 +6,7 @@ ___
 
 Understand the process of creating docker containers using the [docker-image](https://github.com/design-group/ignition-docker).
 
-This project assumes you have a local Traefik reverse proxy running, if not, you can set one up using this repository [traefik-proxy](https://github.com/design-group/traefik-proxy)
+This project is compatible *with* and *without* Traefik. You can set up the Traefik Proxy using [this repository.](https://github.com/design-group/traefik-proxy)
 
 ___
 
@@ -28,21 +28,34 @@ ___
     ```
 
 4. Review the `docker-compose.yml` file to verify the container structure is correct
-5. If using a reverse proxy, go through the `docker-compose.traefik.yml` file and change all instances of `ignition-template` to your project name.
-6. Review the `.gitignore` file to add any
-   additional directories and contents to ignore.
-7. To name the compose project that will be built, edit the `.env` file and set the `COMPOSE_PROJECT_NAME` variable to the name of 	your project.
+5. If you are using Traefik, go through the `docker-compose.traefik.yml` file and change all instances of `<desired-address>` to your desired web address.
 
-	```sh
-	COMPOSE_PROJECT_NAME=<project-name>
+   ```sh
+     services:
+       gateway:
+         healthcheck:
+           disable: true
+         labels:
+           traefik.enable: "true"
+           traefik.hostname: <desired-address>
+         environment:
+           GATEWAY_SYSTEM_NAME: <desired-address>
+         networks:
+           - default
+           - proxy
+	```
+6. Review the `.gitignore` file to add any additional directories and contents to ignore.
+7. To name the compose project that will be built, edit the `.env` file and set the `COMPOSE_PROJECT_NAME` variable to the name of your project.
+
+   	```sh
+    COMPOSE_PROJECT_NAME=<project-name>
 	```
 
-	or if you are using traefik as a reverse proxy, set the `.env` file to:
+   If you are using Traefik, uncomment the following lines in the `.env` file:
 
 	```sh
 	COMPOSE_PATH_SEPARATOR=:
 	COMPOSE_FILE=docker-compose.yml:docker-compose.traefik.yml
-	COMPOSE_PROJECT_NAME=<project-name>
 	```
 
 8. If mounting the `workdir` volume on a non-MacOS device, make sure to create the directory first so that it is owned by the user running the container.
@@ -65,9 +78,10 @@ ___
     docker-compose pull && docker-compose up -d
     ```
 
-10. In a web browser, access the gateway at `http://localhost/` (No port is required, since the template is using port 80)
+10. Whether or not you are using Traefik, you can access the gateway at [http://localhost:9080/](http://localhost:9080/)
 
-11. If using traefik, access the gateway at `http://<project-name>.localtest.me`
+11. If you are using Traefik, you can also access the gateway at `http://<desired-address>.localtest.me`
+
 
 ___
 
