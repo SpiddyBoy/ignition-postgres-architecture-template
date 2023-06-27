@@ -3,7 +3,7 @@ services:
     image: bwdesigngroup/ignition-docker:latest
     hostname: gateway
     ports:
-      - 8088
+      - 9080:8088
     volumes:
       - ./ignition-data:/workdir
       - ./backups/gateway.gwbk:/restore.gwbk
@@ -12,6 +12,7 @@ services:
       - SYMLINK_LOGBACK=false
     command: >
       -r /restore.gwbk
+ 
   database:
     image: postgres
     hostname: postgres
