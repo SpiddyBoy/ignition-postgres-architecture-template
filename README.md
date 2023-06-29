@@ -40,6 +40,9 @@ ___
            traefik.hostname: <desired-address>
          environment:
            GATEWAY_SYSTEM_NAME: <desired-address>
+           GATEWAY_PUBLIC_HTTP_PORT: 80
+           GATEWAY_PUBLIC_HTTPS_PORT: 443
+           GATEWAY_PUBLIC_ADDRESS: <desired-address>.localtest.me
          networks:
            - default
            - proxy
